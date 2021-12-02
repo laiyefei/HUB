@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  oracle:
+    image: docker.pkg.github.com/laiyefei/hub/oracle:latest
+    container_name: oracle_by_laiyefei
+    privileged: true
+    environment:
+      - TZ=Asia/Shanghai
+      - ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe/
+    volumes:
+      - ~/laiyefei/datas/oracle:/u01/app/oracle
+    ports:
+      - 1521:1521
+    restart: always
+

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  postgresql:
+    image: docker.pkg.github.com/laiyefei/hub/postgres:latest
+    container_name: postgresql
+    restart: always
+    environment:
+      POSTGRES_DB: test
+      POSTGRES_USER: laiyefei
+      POSTGRES_PASSWORD: laiyefei
+    ports:
+        - 5432:5432
+    volumes:
+      - ~/laiyefei/datas/postgresql:/var/lib/postgresql/data
