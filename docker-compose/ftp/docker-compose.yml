@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  ftp:
+    image: docker.pkg.github.com/laiyefei/hub/pure-ftpd
+    ports:
+      - "2221:21"
+      - "30010-30019:30010-30019"
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: laiyefei
+      FTP_USER_PASS: laiyefei
+      FTP_USER_HOME: /home/laiyefei
+      FTP_PASSIVE_PORTS: "30010:30019"
+  sftp:
+    image: docker.pkg.github.com/laiyefei/hub/sftp:latest
+    ports:
+      - "2222:22"
+    command: laiyefei:laiyefei:::upload
+  sftpssh:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "2223:22"
+    command: laiyefei::::upload
