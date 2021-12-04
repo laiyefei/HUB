@@ -12,6 +12,7 @@ services:
     networks:
       - nginx
     privileged: true
+    user: 1000:10001
     volumes:
       - ~/laiyefei/datas/nginx/etc:/etc/nginx
       - ~/laiyefei/datas/nginx/conf.d:/etc/nginx/conf.d
