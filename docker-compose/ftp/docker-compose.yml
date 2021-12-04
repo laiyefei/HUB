@@ -12,6 +12,9 @@ services:
       FTP_USER_PASS: laiyefei
       FTP_USER_HOME: /home/laiyefei
       FTP_PASSIVE_PORTS: "30010:30019"
+    #command:
+    #- "openssl req -x509 -nodes -newkey rsa:2048 -keyout /etc/ssl/private/pure-ftpd.pem -out /etc/ssl/private/pure-ftpd.pem -days 365"
+    #- "echo \"2\" > /etc/pure-ftpd/conf/TLS"
   sftp:
     image: docker.pkg.github.com/laiyefei/hub/sftp:latest
     ports:
