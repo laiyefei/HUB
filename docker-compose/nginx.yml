@@ -1,4 +1,7 @@
 version: '3.1'
+networks:
+  nginx:
+    driver: bridge
 services:
   nginx:
     container_name: nginx
@@ -6,6 +9,8 @@ services:
     restart: always
     ports:
       - 80:80
+    networks:
+      - nginx
     privileged: true
     volumes:
       - ~/laiyefei/datas/nginx/etc:/etc/nginx
