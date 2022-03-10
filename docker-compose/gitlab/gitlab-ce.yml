@@ -1,0 +1,24 @@
+version: "3"
+services:
+  web:
+    image: 'docker.pkg.github.com/laiyefei/hub/gitlab-ce'
+    restart: always
+    hostname: ${ip}
+    container_name: gitlab
+    privileged: true
+    environment:
+      TZ: 'Asia/Shanghai'
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://${ip}:10000'
+        gitlab_rails['gitlab_shell_ssh_port'] = 10022
+        nginx['listen_port'] = 80
+        #puma['port'] = 18888
+        #gitlab_workhorse['auth_backend'] = "http://localhost:18888"
+    ports:
+      - '10000:80'
+      - '10443:443'
+      - '10022:22'
+    volumes:
+      - '~/laiyefei/datas/gitlab/config:/etc/gitlab'
+      - '~/laiyefei/datas/gitlab/logs:/var/log/gitlab'
+      - '~/laiyefei/datas/gitlab/data:/var/opt/gitlab'

@@ -1,0 +1,15 @@
+version: "3"
+services:
+  gitlab-runner:
+    image: docker.pkg.github.com/laiyefei/hub/gitlab-runner:alpine
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ~/laiyefei/datas/gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+
+    # ps. 手动配置
+    # 进入容器
+    # 编辑 /etc/gitlab-runner/config.toml
+    # 添加 pull_policy = "if-not-present"
