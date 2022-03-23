@@ -1,0 +1,14 @@
+version: '3'
+services:
+  nexus:
+    restart: unless-stopped
+    image: sonatype/nexus3
+#    volumes:
+#      - /srv/docker/nexus/nexus-data:/nexus-data:Z
+    ports:
+      - "8081:8081"
+    networks:
+      - nexus_npm
+networks:
+  nexus_npm:
+    driver: bridge
