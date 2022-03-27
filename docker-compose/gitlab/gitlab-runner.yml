@@ -13,3 +13,6 @@ services:
     # 进入容器
     # 编辑 /etc/gitlab-runner/config.toml
     # 添加 pull_policy = "if-not-present"
+    # log 日志大小限制
+    # [[runners]]
+    #   output_limit = 10000
