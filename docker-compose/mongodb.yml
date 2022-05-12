@@ -8,7 +8,7 @@ services:
     command: mongod --shardsvr --directoryperdb --replSet shard1
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/shard1:/data/db
+      - ~/laiyefei/datas/mongo/shard1:/data/db
     privileged: true
     mem_limit: 16000000000
     networks:
@@ -20,7 +20,7 @@ services:
     command: mongod --shardsvr --directoryperdb --replSet shard2
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/shard2:/data/db
+      - ~/laiyefei/datas/mongo/shard2:/data/db
     privileged: true
     mem_limit: 16000000000
     networks:
@@ -32,7 +32,7 @@ services:
     command: mongod --shardsvr --directoryperdb --replSet shard3
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/shard3:/data/db
+      - ~/laiyefei/datas/mongo/shard3:/data/db
     privileged: true
     mem_limit: 16000000000
     networks:
@@ -45,7 +45,7 @@ services:
     command: mongod --configsvr --directoryperdb --replSet fates-mongo-config
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/config1:/data/configdb
+      - ~/laiyefei/datas/mongo/config1:/data/configdb
     networks:
       - mongo
 
@@ -55,7 +55,7 @@ services:
     command: mongod --configsvr --directoryperdb --replSet fates-mongo-config
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/config2:/data/configdb
+      - ~/laiyefei/datas/mongo/config2:/data/configdb
     networks:
       - mongo
 
@@ -65,7 +65,7 @@ services:
     command: mongod --configsvr --directoryperdb --replSet fates-mongo-config
     volumes:
       - /etc/localtime:/etc/localtime
-      - ~/laiyefei/data/mongo/config3:/data/configdb
+      - ~/laiyefei/datas/mongo/config3:/data/configdb
     networks:
       - mongo
 
