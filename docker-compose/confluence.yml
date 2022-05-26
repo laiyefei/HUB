@@ -1,0 +1,16 @@
+version: '3'
+services:
+  confluence:
+    container_name: confluence
+    image: docker.pkg.github.com/laiyefei/hub/confluence
+    ports:
+      - 1111:1111
+      - 1112:1112
+    environment:
+      - TZ=Asia/Shanghai
+    command: "sh run.sh"
+    networks:
+      - confluence
+networks:
+  confluence:
+    driver: bridge
