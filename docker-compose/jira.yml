@@ -1,0 +1,32 @@
+version: "3"
+services:
+  jira:
+    image: docker.pkg.github.com/laiyefei/hub/jira:latest
+    environment:
+      - JVM_XMX=2048m
+      - JVM_XMS=1024m
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
+    restart: always
+    volumes:
+      - ~/laiyefei/datas/jira/data:/var/atlassian/jira/data
+      - ~/laiyefei/datas/logs:/opt/atlassian/jira/logs
+    networks:
+      - jira
+  postgres:
+    image: docker.pkg.github.com/laiyefei/hub/postgres:latest
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_USER=jira
+      - POSTGRES_PASSWORD=jira@laiyefei
+      - POSTGRES_DATABASE=jira
+      - POSTGRES_ROOT_PASSWORD=jira@laiyefei
+    volumes:
+      - ~/laiyefei/datas/jira/postgres/data:/var/lib/postgresql/data
+networks:
+  jira:
+    driver: bridge

@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  gogs:
+    container_name: gogs
+    image: docker.io/gogs/gogs:latest
+    hostname: gogs
+    restart: always
+    ports:
+      - "1022:22"
+      - "3000:3000"
+    volumes:
+      - /.laiyefei/datas/gogs/:/data/docker/gogs
+    networks:
+      - gogs
+  gogs-mysql:
+    image: docker.pkg.github.com/laiyefei/hub/mysql:8.0.27
+    container_name: gogs-mysql
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    restart: always
+    volumes:
+      - ~/laiyefei/datas/mysql:/var/lib/mysql/
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=laiyefei
+networks:
+  gogs:
+    driver: bridge
