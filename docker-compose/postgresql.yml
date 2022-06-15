@@ -11,7 +11,7 @@ services:
     ports:
         - 5432:5432
     volumes:
-      - ~/laiyefei/datas/postgresql:/var/lib/postgresql/data
+      - ~/.laiyefei/datas/postgresql:/var/lib/postgresql/data
   pgadmin4:
     image: docker.pkg.github.com/laiyefei/hub/pgadmin4:latest
     ports:

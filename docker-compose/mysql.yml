@@ -6,8 +6,8 @@ services:
     entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
     restart: always
     volumes:
-      - ~/laiyefei/datas/mysql:/var/lib/mysql/
+      - ~/.laiyefei/datas/mysql:/var/lib/mysql/
     ports:
-      - 3306:3306
+      - 3333:3306
     environment:
       - MYSQL_ROOT_PASSWORD=laiyefei

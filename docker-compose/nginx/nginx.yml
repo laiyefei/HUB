@@ -6,4 +6,10 @@ services:
   ports:
    - 9999:80
   volumes:
-   - ~/laiyefei/datas/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+   - ~/.laiyefei/datas/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+   - ~/.laiyefei/datas/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  networks:
+   - nginx
+networks:
+ nginx:
+  driver: bridge
