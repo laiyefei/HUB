@@ -1,13 +1,16 @@
 version: '3'
 services:
   elasticsearch:
-    image: elasticsearch:7.13.2
+    image: docker.pkg.github.com/laiyefei/hub/elasticsearch:7.13.2
     container_name: elk_elasticsearch
     restart: on-failure
     environment:
       - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
       - "discovery.type=single-node" #以单一节点模式启动
       - "ES_JAVA_OPTS=-Xms512m -Xmx1024m" #设置使用jvm内存大小
+      - "TZ=Asia/Shanghai"
+      - "ELASTIC_PASSWORD=laiyefei"
+      - "xpack.security.enabled=true"
     networks:
       - elk
     volumes:
@@ -17,7 +20,7 @@ services:
       - 9200:9200
       - 9300:9300
   kibana:
-    image: kibana:7.13.2
+    image: docker.pkg.github.com/laiyefei/hub/kibana:7.13.2
     container_name: elk_kibana
     restart: on-failure
     depends_on:
@@ -29,10 +32,12 @@ services:
       I18N_LOCALE: zh-CN
       ELASTICSEARCH_URL: http://elasticsearch:9200
       XPACK_SECURITY_ENCRYPTIONKEY: D8824EC9409B44E28908D4CFBC1E9872
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: laiyefei
     ports:
       - 5601:5601
   logstash:
-    image: logstash:7.13.2
+    image: docker.pkg.github.com/laiyefei/hub/logstash:7.13.2
     container_name: elk_logstash
     restart: on-failure
     volumes:
@@ -47,7 +52,7 @@ services:
       - 9600:9600
       - 5044:5044
   filebeat:
-    image: docker.elastic.co/beats/filebeat:7.13.2
+    image: docker.pkg.github.com/laiyefei/hub/filebeat:7.13.2
     container_name: filebeat
     hostname: filebeat
     restart: on-failure
@@ -59,6 +64,52 @@ services:
       - elk
     depends_on:
       - logstash
+#集群配置
+#  es01:
+#    depends_on:
+#      setup:
+#        condition: service_healthy
+#    image: docker.elastic.co/elasticsearch/elasticsearch:${STACK_VERSION}
+#    volumes:
+#      - certs:/usr/share/elasticsearch/config/certs
+#      - esdata01:/usr/share/elasticsearch/data
+#    ports:
+#      - ${ES_PORT}:9200
+#    environment:
+#      - node.name=es01
+#      - cluster.name=${CLUSTER_NAME}
+#      - cluster.initial_master_nodes=es01,es02,es03
+#      - discovery.seed_hosts=es02,es03
+#      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+#      - bootstrap.memory_lock=true
+#      - xpack.security.enabled=true
+#      - xpack.security.http.ssl.enabled=true
+#      - xpack.security.http.ssl.key=certs/es01/es01.key
+#      - xpack.security.http.ssl.certificate=certs/es01/es01.crt
+#      - xpack.security.http.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.http.ssl.verification_mode=certificate
+#      - xpack.security.transport.ssl.enabled=true
+#      - xpack.security.transport.ssl.key=certs/es01/es01.key
+#      - xpack.security.transport.ssl.certificate=certs/es01/es01.crt
+#      - xpack.security.transport.ssl.certificate_authorities=certs/ca/ca.crt
+#      - xpack.security.transport.ssl.verification_mode=certificate
+#      - xpack.license.self_generated.type=${LICENSE}
+#      mem_limit: ${MEM_LIMIT}
+#    ulimits:
+#      memlock:
+#        soft: -1
+#        hard: -1
+#    healthcheck:
+#      test:
+#        [
+#            "CMD-SHELL",
+#            "curl -s --cacert config/certs/ca/ca.crt https://localhost:9200 | grep -q 'missing authentication credentials'",
+#        ]
+#      interval: 10s
+#      timeout: 10s
+#      retries: 120
+
+
 networks:
   elk:
     driver: bridge

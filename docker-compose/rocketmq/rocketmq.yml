@@ -1,0 +1,61 @@
+version: '3'
+services:
+  #region rocketmq
+  #Service for nameserver
+  rmq_namesrv:
+    image: docker.pkg.github.com/laiyefei/hub/rocketmq:4.4.0
+    container_name: rmq_namesrv
+    ports:
+      - 9876:9876
+    volumes:
+      - ~/.laiyefei/datas/rocketmq/namesrv/logs:/home/rocketmq/logs
+    command: sh mqnamesrv
+
+  #Service for broker
+  rmq_broker_1:
+    image: docker.pkg.github.com/laiyefei/hub/rocketmq:4.4.0
+    container_name: rmq_broker_1
+    links:
+      - rmq_namesrv
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    environment:
+      - NAMESRV_ADDR=rmq_namesrv:9876
+    volumes:
+      - ~/.laiyefei/datas/rocketmq/broker_1/logs:/home/rocketmq/logs
+      - ~/.laiyefei/datas/rocketmq/broker_1/store:/home/rocketmq/store
+      - ~/.laiyefei/datas/rocketmq/broker_1/conf/broker.conf:/opt/rocketmq-4.4.0/conf/broker.conf
+    command: sh mqbroker -c ../conf/broker.conf
+    depends_on:
+      - rmq_namesrv
+  #Service for another broker -- broker1
+  rmq_broker_2:
+    image: docker.pkg.github.com/laiyefei/hub/rocketmq:4.4.0
+    container_name: rmq_broker_2
+    links:
+      - rmq_namesrv
+    ports:
+      - 10929:10909
+      - 10931:10911
+      - 10932:10912
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+    volumes:
+      - ~/.laiyefei/datas/rocketmq/broker_2/logs:/home/rocketmq/logs
+      - ~/.laiyefei/datas/rocketmq/broker_2/store:/home/rocketmq/store
+      - ~/.laiyefei/datas/rocketmq/broker_2/conf/broker.conf:/opt/rocketmq-4.4.0/conf/broker.conf
+    command: sh mqbroker -c ../conf/broker.conf
+    depends_on:
+      - rmq_namesrv
+  rmq_console:
+    image: docker.pkg.github.com/laiyefei/hub/rocketmq-console
+    container_name: rmq_console
+    ports:
+      - 8080:8080
+    environment:
+      JAVA_OPTS: "-Drocketmq.namesrv.addr=rmq_namesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+    depends_on:
+      - rmq_namesrv
+  #endregion

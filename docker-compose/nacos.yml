@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  nacos_mysql:
+    image: docker.pkg.github.com/laiyefei/hub/mysql_nacos_native:8.0.27
+    container_name: nacos_mysql
+    entrypoint: [ '/entrypoint.sh', '--default-authentication-plugin=mysql_native_password' ]
+    restart: always
+    volumes:
+      - ~/.laiyefei/datas/nacos/mysql:/var/lib/mysql/
+    networks:
+      - nacos
+    environment:
+      - MYSQL_ROOT_PASSWORD=laiyefei
+  nacos:
+    image: nacos/nacos-server
+    container_name: nacos
+    environment:
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=nacos_mysql
+      - MYSQL_MASTER_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=laiyefei
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - JVM_XMS=1024m
+      - JVM_MMS=512m
+    #volumes:
+      #- ~/.laiyefei/datas/nacos/conf:/home/nacos/conf
+      #- ~/.laiyefei/datas/nacos/init.d:/home/nacos/init.d
+      #- ~/.laiyefei/datas/nacos/logs:/home/nacos/logs
+    ports:
+      - "8848:8848"
+    networks:
+      - nacos
+    depends_on:
+      - nacos_mysql
+networks:
+  nacos:
+    driver: bridge
